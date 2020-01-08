@@ -1,10 +1,12 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HotelTest {
 
@@ -21,6 +23,8 @@ public class HotelTest {
     private Guest guest1;
     private Guest guest2;
     private Guest guest3;
+    private ArrayList<Guest> guests1;
+    private ArrayList<Guest> guests2;
 
     private Booking booking;
 
@@ -36,6 +40,11 @@ public class HotelTest {
         guest1 = new Guest("Eugene Kim");
         guest2 = new Guest("Daniel Toth");
         guest3 = new Guest("Nelson the BananaBread");
+        guests1 = new ArrayList<Guest>();
+        guests1.add(guest1);
+        guests2 = new ArrayList<Guest>();
+        guests2.add(guest2);
+        guests2.add(guest3);
 
         bedroom1 = new Bedroom(102, 2, "Double", 30.00);
         bedroom2 = new Bedroom(103, 1, "Single", 25.00);
@@ -60,15 +69,21 @@ public class HotelTest {
 
     @Test
     public void canCheckInGuestToBedroom(){
-        hotel.checkInToBedroom(bedroom1, guest1);
+        hotel.checkInToBedroom(bedroom1, guests1);
         assertEquals(1, bedroom1.guestCount());
     }
 
     @Test
-    public void cantCheckInGuestToBedroom(){
-        hotel.checkInToBedroom(bedroom2, guest1);
-        hotel.checkInToBedroom(bedroom2, guest2);
-        assertEquals(1, bedroom2.guestCount());
+    public void cantCheckInGuestToBedroomBecauseItsFull(){
+        hotel.checkInToBedroom(bedroom2, guests2);
+        assertEquals(0, bedroom2.guestCount());
+    }
+
+    @Test
+    public void cantCheckInGuestToBedroomBecauseRoomInUse(){
+        hotel.checkInToBedroom(bedroom1, guests1);
+        hotel.checkInToBedroom(bedroom1, guests1);
+        assertEquals(1, bedroom1.guestCount());
     }
 
     @Test
@@ -90,6 +105,14 @@ public class HotelTest {
         Booking result = hotel.bookRoom(bedroom1, 2);
         assertEquals(bedroom1, result.getBedroom());
         assertEquals(2, result.numberOfNights());
+    }
+
+    @Test
+    public void findEmptyBedrooms(){
+        bedroom1.addGuest(guests1);
+        ArrayList<Bedroom> emptyRooms = hotel.roomsAvailable();
+        assertEquals(1, emptyRooms.size());
+        assertTrue(emptyRooms.contains(bedroom2));
     }
 
 }

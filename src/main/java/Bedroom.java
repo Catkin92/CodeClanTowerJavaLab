@@ -33,9 +33,9 @@ public class Bedroom {
         return this.guests.size();
     }
 
-    public void addGuest(Guest guest) {
-        if(this.capacity > guestCount()){
-            this.guests.add(guest);
+    public void addGuest(ArrayList<Guest> guests) {
+        if(this.capacity > guests.size()){
+            this.guests = guests;
         }
     }
 
