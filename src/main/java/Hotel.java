@@ -30,4 +30,9 @@ public class Hotel {
             confRoom.addGuest(guest);
         }
     }
+
+    public Booking bookRoom(Bedroom bedroom, int nights) {
+        Booking booking = new Booking(bedroom, nights);
+        return booking;
+    }
 }

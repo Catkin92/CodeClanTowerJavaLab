@@ -22,6 +22,8 @@ public class HotelTest {
     private Guest guest2;
     private Guest guest3;
 
+    private Booking booking;
+
 
     @Before
     public void before(){
@@ -35,13 +37,15 @@ public class HotelTest {
         guest2 = new Guest("Daniel Toth");
         guest3 = new Guest("Nelson the BananaBread");
 
-        bedroom1 = new Bedroom(102, 2, "Double");
-        bedroom2 = new Bedroom(103, 1, "Single");
+        bedroom1 = new Bedroom(102, 2, "Double", 30.00);
+        bedroom2 = new Bedroom(103, 1, "Single", 25.00);
         bedrooms = new ArrayList<Bedroom>();
         bedrooms.add(bedroom1);
         bedrooms.add(bedroom2);
 
         hotel = new Hotel(confRooms, bedrooms);
+
+        booking = new Booking(bedroom1, 2);
     }
 
     @Test
@@ -80,4 +84,12 @@ public class HotelTest {
         hotel.checkInToConfRoom(confRoom1, guest3);
         assertEquals(2, confRoom1.guestCount());
     }
+
+    @Test
+    public void createBooking(){
+        Booking result = hotel.bookRoom(bedroom1, 2);
+        assertEquals(bedroom1, result.getBedroom());
+        assertEquals(2, result.numberOfNights());
+    }
+
 }
